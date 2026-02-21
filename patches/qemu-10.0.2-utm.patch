@@ -561,7 +561,7 @@ index b47722ea4f..c7688256e9 100644
 -- 
 2.50.1 (Apple Git-155)
 
-From 0820637620267d67799ec24ba62609ccf5241bad Mon Sep 17 00:00:00 2001
+From cde37cd6ddc4fa4e6ffe6151ef182147d676b87a Mon Sep 17 00:00:00 2001
 From: osy <osy@turing.llc>
 Date: Sat, 8 Nov 2025 16:18:44 -0800
 Subject: [PATCH 1/9] Revert "Use virgl_renderer_borrow_texture_for_scanout"
@@ -579,9 +579,9 @@ This reverts commit 8b9e3062a4c2e243f0f80482385ebccbb8357f71.
  ui/egl-headless.c             |  23 +-------
  ui/gtk-egl.c                  |  27 ++-------
  ui/gtk-gl-area.c              |  24 +-------
- ui/sdl2-gl.c                  |  13 ++---
+ ui/sdl2-gl.c                  |  17 ++----
  ui/spice-display.c            |  36 +++++-------
- 13 files changed, 107 insertions(+), 226 deletions(-)
+ 13 files changed, 107 insertions(+), 230 deletions(-)
 
 diff --git a/hw/display/virtio-gpu-virgl.c b/hw/display/virtio-gpu-virgl.c
 index d78c2e4892..145a0b3879 100644
@@ -1118,10 +1118,10 @@ index 32bca91cbb..2c9a0db425 100644
                                 x, y, width, height, NULL);
  
 diff --git a/ui/sdl2-gl.c b/ui/sdl2-gl.c
-index b164fb6b28..1d8ff3fab0 100644
+index b164fb6b28..061f10c449 100644
 --- a/ui/sdl2-gl.c
 +++ b/ui/sdl2-gl.c
-@@ -201,15 +201,14 @@ void sdl2_gl_scanout_disable(DisplayChangeListener *dcl)
+@@ -201,22 +201,17 @@ void sdl2_gl_scanout_disable(DisplayChangeListener *dcl)
  
  void sdl2_gl_scanout_texture(DisplayChangeListener *dcl,
                               uint32_t backing_id,
@@ -1142,7 +1142,14 @@ index b164fb6b28..1d8ff3fab0 100644
  
      assert(scon->opengl);
  
-@@ -227,7 +226,7 @@ void sdl2_gl_scanout_texture(DisplayChangeListener *dcl,
+-    GLuint backing_texture = backing_borrow(backing_id, &backing_y_0_top,
+-                                            &backing_width, &backing_height,
+-                                            &d3d_tex2d);
+-
+     scon->x = x;
+     scon->y = y;
+     scon->w = w;
+@@ -227,7 +222,7 @@ void sdl2_gl_scanout_texture(DisplayChangeListener *dcl,
  
      sdl2_set_scanout_mode(scon, true);
      egl_fb_setup_for_tex(&scon->guest_fb, backing_width, backing_height,
@@ -1237,7 +1244,7 @@ index c7688256e9..61cdda0e8a 100644
      }
  #endif
 -- 
-2.41.0
+2.50.1 (Apple Git-155)
 
 From 11c36e637e854a63d07dc902e82378c8e2a9071f Mon Sep 17 00:00:00 2001
 From: Joelle van Dyne <j@getutm.app>
